@@ -2,22 +2,57 @@ package calculadora;
 
 public class TesteCalculadora {
 
-    public static void testar(Calculadora calculadora, int a, int b, String op, double esperado) {
-        double obtido = calculadora.calc(a, b, op);
-        boolean passou;
+    private static Calculadora calculadora = new Calculadora();
 
-        if (Double.isNaN(esperado)) {
-            passou = Double.isNaN(obtido);
-        } else {
-            passou = Double.compare(esperado, obtido) == 0;
-        }
+    public static void main(String[] args) {
+        executarTestes();
+    }
+
+    static void executarTestes() {
+
+        testarSoma();
+        testarSubtracao();
+        testarMultiplicacao();
+        testarDivisao();
+        testarDivisaoPorZero();
+        testarOperacaoInvalida();
+    }
+
+    private static void testarSoma() {
+        verificarResultado(10, 5, "+", 15);
+    }
+
+    private static void testarSubtracao() {
+        verificarResultado(10, 5, "-", 5);
+    }
+
+    private static void testarMultiplicacao() {
+        verificarResultado(10, 5, "*", 50);
+    }
+
+    private static void testarDivisao() {
+        verificarResultado(10, 5, "/", 2);
+    }
+
+    private static void testarDivisaoPorZero() {
+        verificarResultado(10, 0, "/", Double.NaN);
+    }
+
+    private static void testarOperacaoInvalida() {
+        verificarResultado(10, 5, "%", Double.NaN);
+    }
+
+    private static void verificarResultado(int primeiroNumero, int segundoNumero, String operador, double resultadoEsperado) {
+        double resultadoObtido = calculadora.calc(primeiroNumero,segundoNumero,operador);
+
+        boolean passou = Double.isNaN(resultadoEsperado) ? Double.isNaN(resultadoObtido) : Double.compare(resultadoEsperado, resultadoObtido) == 0;
 
         System.out.println("--------------------");
-        System.out.println("Entrada: " + a + " " + op + " " + b);
-        System.out.println("Esperado: " + esperado);
-        System.out.println("Obtido: " + obtido);
+        System.out.println("Entrada: " + primeiroNumero + " " + operador + " " + segundoNumero);
+        System.out.println("Esperado: " + resultadoEsperado);
+        System.out.println("Obtido: " + resultadoObtido);
         System.out.println(passou ? "PASSOU" : "FALHOU");
-
+        
         if (!passou) {
             throw new AssertionError("Teste falhou");
         }
